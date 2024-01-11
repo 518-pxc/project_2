@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="id_1">保存</string>
+    <string name="id_2">择偶条件</string>
+    <string name="id_3">平台将根据以下条件为你精准推荐用户,若满足要求的用户不足,可能会放宽条件。</string>
+    <string name="id_4">当前位置</string>
+    <string name="id_5">北京</string>
+    <string name="id_6">年龄范围</string>
+    <string name="id_7">18</string>
+    <string name="id_8">60</string>
+    <string name="id_9">身高范围</string>
+    <string name="id_10">cm</string>
+    <string name="id_11">140</string>
+    <string name="id_12">200</string>
+    <string name="id_13">体重范围</string>
+    <string name="id_14">kg</string>
+    <string name="id_15">优先推荐最近活跃的用户</string>
+    <string name="id_16">优先推荐已真人认证的用户</string>
+    <string name="id_17">优先推荐最新加入的用户</string>
+    <string name="id_18">下一步</string>
+    <string name="id_19">30</string>
+    <string name="id_20">200</string>
+    <string name="id_21">46</string>
+    <string name="id_22">82</string>
+
+
+</resources>
