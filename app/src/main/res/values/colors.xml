@@ -4,4 +4,6 @@
     <color name="blue">#F5F6F7</color>
     <color name="left">#000000</color>
     <color name="black">#383838</color>
+    <color name="save">#313131</color>
+    <color name="my_dark_primary">#FFFFFF</color>
 </resources>

@@ -1,101 +1,167 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ProgressBar
+import android.widget.TextView
 
-class DoubleThumbProgressBar(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    var progress: Float = 0f
-    var secondaryProgress: Float = 0f
-    private var progressBarHeight: Float = 20f // 进度条高度
-    private var progressColor: Int = Color.BLUE // 进度条颜色
-    private var secondaryProgressColor: Int = Color.GRAY // 次进度条颜色
-    private var thumbDrawable: Drawable? = null // 用于存储thumb的Drawable
-    private var thumbDrawable2: Drawable? = null // 用于存储第二个thumb的Drawable
+@SuppressLint("UseCompatLoadingForDrawables")
+class DoubleThumbProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+    private var rangeMin = 0
+    private var rangeMax = 100
+    private var thumbDrawable: Drawable? = null
+    private var thumbRadius = 0f
+    private var thumbPaint = Paint()
+    private var thumb1X = 0f
+    private var thumb2X = 0f
+    private var thumbY = 0f
+    private var progressPaint = Paint()
+    private var progressRect = RectF()
+    // 使用可空类型声明属性
+    private var tvAgeFirst: TextView? = null
+    private var tvAgeSecond: TextView? = null
+
 
     init {
-        // 从资源中加载图片作为thumb
-        thumbDrawable = resources.getDrawable(R.drawable.slide, null)
-        thumbDrawable2 = resources.getDrawable(R.drawable.slide, null)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DoubleThumbProgressBar)
-        progress = typedArray.getFloat(R.styleable.DoubleThumbProgressBar_progress, 0f)
-        secondaryProgress = typedArray.getFloat(R.styleable.DoubleThumbProgressBar_secondaryProgress, 0f)
-        progressBarHeight = typedArray.getDimension(R.styleable.DoubleThumbProgressBar_progressBarHeight, 20f)
-        progressColor = typedArray.getColor(R.styleable.DoubleThumbProgressBar_progressColor, Color.BLUE)
-        secondaryProgressColor = typedArray.getColor(R.styleable.DoubleThumbProgressBar_secondaryProgressColor, Color.GRAY)
+        rangeMin = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMin, 0)
+        rangeMax = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMax, 100)
+        thumbDrawable = context.getDrawable(R.drawable.slide)
         typedArray.recycle()
-    }
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                if (event.x < width * progress) {
-                    // 第一个thumb被按下
-                    val newProgress = event.x / width
-                    setProgressAndSecondaryProgress(newProgress, secondaryProgress)
-                    return true
-                } else if (event.x > width * secondaryProgress) {
-                    // 第二个thumb被按下
-                    val newSecondaryProgress = event.x / width
-                    setProgressAndSecondaryProgress(progress, newSecondaryProgress)
-                    return true
-                }
-            }
-            MotionEvent.ACTION_MOVE -> {
-                if (event.x < width * progress && event.x >= 0) {
-                    // 第一个thumb移动
-                    val newProgress = event.x / width
-                    setProgressAndSecondaryProgress(newProgress, secondaryProgress)
-                    return true
-                } else if (event.x > width * secondaryProgress && event.x <= width) {
-                    // 第二个thumb移动
-                    val newSecondaryProgress = event.x / width
-                    setProgressAndSecondaryProgress(progress, newSecondaryProgress)
-                    return true
-                }
-            }
+        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat() ?: 15f
+        thumbPaint.isAntiAlias = true
+        progressPaint.isAntiAlias = true
+        progressPaint.color = Color.parseColor("#383838")
+        if (!isInEditMode) {
+            // 在非预览模式下初始化控件
+            tvAgeFirst = findViewById(R.id.tvAgeFirst)
+            tvAgeSecond = findViewById(R.id.tvAgeSecond)
         }
-        return super.onTouchEvent(event)
     }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        thumbY = h / 2f
+        thumb1X = w * (rangeMin - rangeMin) / (rangeMax - rangeMin).toFloat()
+        thumb2X = w * (rangeMax - rangeMin) / (rangeMax - rangeMin).toFloat()
+    }
+
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val progressWidth = width * progress
-        val secondaryProgressWidth = width * secondaryProgress
+        // 绘制未划过区域的进度条
+        val unselectedRect = RectF(0f, thumbY - 5, thumb1X, thumbY + 5)
+        progressPaint.color = Color.parseColor("#DEE0E3")
+        canvas.drawRect(unselectedRect, progressPaint)
 
-        val progressRect = RectF(0f, height / 2 - progressBarHeight / 2, progressWidth, height / 2 + progressBarHeight / 2)
-        val secondaryProgressRect = RectF(0f, height / 2 - progressBarHeight / 2, secondaryProgressWidth, height / 2 + progressBarHeight / 2)
+        val unselectedRect2 = RectF(thumb2X, thumbY - 5, width.toFloat(), thumbY + 5)
+        canvas.drawRect(unselectedRect2, progressPaint)
 
-        val progressPaint = Paint()
-        progressPaint.color = progressColor
-        canvas.drawRoundRect(progressRect, progressBarHeight / 2, progressBarHeight / 2, progressPaint)
+        // 绘制滑块划过的区域
+        thumbPaint.color = Color.parseColor("#383838")
+        val thumbRect = RectF(thumb1X, thumbY - 5, thumb2X, thumbY + 5)
+        canvas.drawRect(thumbRect, thumbPaint)
 
-        val secondaryProgressPaint = Paint()
-        secondaryProgressPaint.color = secondaryProgressColor
-        canvas.drawRoundRect(secondaryProgressRect, progressBarHeight / 2, progressBarHeight / 2, secondaryProgressPaint)
-
-        // 绘制第一个图片作为第一个thumb
+        // 绘制滑块图片
         thumbDrawable?.let {
-            it.setBounds((progressWidth - it.intrinsicWidth / 2).toInt(), (height / 2 - it.intrinsicHeight / 2).toInt(), (progressWidth + it.intrinsicWidth / 2).toInt(), (height / 2 + it.intrinsicHeight / 2).toInt())
-            it.draw(canvas)
-        }
+            // 获取滑块图片的 Bitmap 对象
+            val thumbBitmap = (it as BitmapDrawable).bitmap
 
-        // 绘制第二个图片作为第二个thumb
-        thumbDrawable2?.let {
-            it.setBounds((secondaryProgressWidth - it.intrinsicWidth / 2).toInt(), (height / 2 - it.intrinsicHeight / 2).toInt(), (secondaryProgressWidth + it.intrinsicWidth / 2).toInt(), (height / 2 + it.intrinsicHeight / 2).toInt())
+            val thumb1Left = thumb1X - thumbBitmap.width / 2
+            val thumb1Top = thumbY - thumbBitmap.height / 2
+            val thumb1Right = thumb1X + thumbBitmap.width / 2
+            val thumb1Bottom = thumbY + thumbBitmap.height / 2
+
+            val thumb2Left = thumb2X - thumbBitmap.width / 2
+            val thumb2Top = thumbY - thumbBitmap.height / 2
+            val thumb2Right = thumb2X + thumbBitmap.width / 2
+            val thumb2Bottom = thumbY + thumbBitmap.height / 2
+
+            // 绘制滑块图片
+            it.setBounds(
+                thumb1Left.toInt(),
+                thumb1Top.toInt(),
+                thumb1Right.toInt(),
+                thumb1Bottom.toInt()
+            )
+            it.draw(canvas)
+
+            it.setBounds(
+                thumb2Left.toInt(),
+                thumb2Top.toInt(),
+                thumb2Right.toInt(),
+                thumb2Bottom.toInt()
+            )
             it.draw(canvas)
         }
+        // 更新 TextView 中的值
+        val minValue = (18 + (thumb1X / width * (60 - 18))).toInt()
+        val maxValue = (18 + (thumb2X / width * (60 - 18))).toInt()
+        tvAgeFirst?.text = minValue.toString()
+        tvAgeSecond?.text = maxValue.toString()
     }
-    inline fun setProgressAndSecondaryProgress(progress: Float, secondaryProgress: Float) {
-        this.progress = progress
-        this.secondaryProgress = secondaryProgress
-        invalidate()
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                // 根据手指位置更新滑块的位置
+                if (event.x < thumb1X) {
+                    thumb1X = event.x
+                } else if (event.x > thumb2X) {
+                    thumb2X = event.x
+                } else {
+                    if (Math.abs(event.x - thumb1X) < Math.abs(event.x - thumb2X)) {
+                        thumb1X = event.x
+                    } else {
+                        thumb2X = event.x
+                    }
+                }
+
+                // 确保滑块位置在范围内
+                if (thumb1X < 0) {
+                    thumb1X = 0f
+                }
+                if (thumb2X > width) {
+                    thumb2X = width.toFloat()
+                }
+                if (thumb1X > thumb2X) {
+                    thumb1X = thumb2X
+                }
+                if (thumb2X < thumb1X) {
+                    thumb2X = thumb1X
+                }
+
+                invalidate()
+
+                // 发送进度值改变的事件
+                val minValue = (18 + (thumb1X / width * (60 - 18))).toInt()
+                val maxValue = (18 + (thumb2X / width * (60 - 18))).toInt()
+                onRangeChangedListener?.onRangeChanged(minValue, maxValue)
+            }
+        }
+        return true
     }
+    interface OnRangeChangedListener {
+        fun onRangeChanged(minValue: Int, maxValue: Int)
+    }
+
+    private var onRangeChangedListener: OnRangeChangedListener? = null
+
+    fun setOnRangeChangedListener(listener: OnRangeChangedListener) {
+        onRangeChangedListener = listener
+    }
+
 }

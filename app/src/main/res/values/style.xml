@@ -1,0 +1,46 @@
+<resources>
+<style name="title_id">
+    <item name="android:textSize">18sp</item>
+    <item name="android:textColor">#383838</item>
+</style>
+    <style name="save_id">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#313131</item>
+    </style>
+
+    <style name="recommendation_id">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">#888888</item>
+    </style>
+
+    <style name="position_id">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#313131</item>
+    </style>
+
+    <style name="beijing_id">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#313131</item>
+    </style>
+
+    <style name="unit_id">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#969799</item>
+    </style>
+
+    <style name="some_id">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#383838</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="time">
+        <item name="android:textSize">15sp</item>
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+</resources>

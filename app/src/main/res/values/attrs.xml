@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DoubleThumbProgressBar">
-        <attr name="progress" format="float" />
-        <attr name="secondaryProgress" format="float" />
-        <attr name="progressBarHeight" format="dimension" />
-        <attr name="progressColor" format="color" />
-        <attr name="secondaryProgressColor" format="color" />
+        <attr name="rangeMin" format="integer" />
+        <attr name="rangeMax" format="integer" />
+        <attr name="thumbDrawable" format="reference" />
     </declare-styleable>
 </resources>
