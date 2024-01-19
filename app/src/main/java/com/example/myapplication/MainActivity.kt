@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         val tvHeightFirst = binding.tvHeightFirst
         val tvHeightSecond = binding.tvHeightSecond
 
-        progressBarHeight.setOnRangeChangedListener(object : DoubleThumbProgressBarTwo.OnRangeChangedListener {
+        progressBarHeight.setOnRangeChangedListener(object : DoubleThumbProgressBar.OnRangeChangedListener {
             override fun onRangeChanged(minValue: Int, maxValue: Int) {
                 // 更新两个 TextView 控件的值
                 tvHeightFirst.text = minValue.toString()
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         val tvWeightFirst = binding.tvWeightFirst
         val tvWeightSecond = binding.tvWeightSecond
 
-        progressBarWeight.setOnRangeChangedListener(object : DoubleThumbProgressBarThree.OnRangeChangedListener {
+        progressBarWeight.setOnRangeChangedListener(object : DoubleThumbProgressBar.OnRangeChangedListener {
             override fun onRangeChanged(minValue: Int, maxValue: Int) {
                 // 更新两个 TextView 控件的值
                 tvWeightFirst.text = minValue.toString()
@@ -111,25 +111,25 @@ class MainActivity : AppCompatActivity() {
     }
     private fun updateSwitchStateOne() {
         if (switchStateOne) {
-            binding.ivClose.setImageResource(R.drawable.switch_open1)
+            binding.ivClose.setImageResource(R.drawable.ic_switch_open)
         } else {
-            binding.ivClose.setImageResource(R.drawable.switch_close)
+            binding.ivClose.setImageResource(R.drawable.ic_switch_close)
         }
     }
 
     private fun updateSwitchStateTwo() {
         if (switchStateTwo) {
-            binding.ivNew.setImageResource(R.drawable.switch_open1)
+            binding.ivNew.setImageResource(R.drawable.ic_switch_open)
         } else {
-            binding.ivNew.setImageResource(R.drawable.switch_close)
+            binding.ivNew.setImageResource(R.drawable.ic_switch_close)
         }
     }
 
     private fun updateSwitchStateThree() {
         if (switchStateThree) {
-            binding.ivTrue.setImageResource(R.drawable.switch_open1)
+            binding.ivTrue.setImageResource(R.drawable.ic_switch_open)
         } else {
-            binding.ivTrue.setImageResource(R.drawable.switch_close)
+            binding.ivTrue.setImageResource(R.drawable.ic_switch_close)
         }
     }
 }
