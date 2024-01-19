@@ -38,9 +38,9 @@ class DoubleThumbProgressBarTwo @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DoubleThumbProgressBar)
         rangeMin = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMin, 0)
         rangeMax = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMax, 100)
-        thumbDrawable = context.getDrawable(R.drawable.slide)
+        thumbDrawable = context.getDrawable(R.drawable.slide2)
         typedArray.recycle()
-        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat() ?: 15f
+        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat() ?: 2f
         thumbPaint.isAntiAlias = true
         progressPaint.isAntiAlias = true
         progressPaint.color = Color.parseColor("#383838")
@@ -59,6 +59,7 @@ class DoubleThumbProgressBarTwo @JvmOverloads constructor(
     }
 
     @SuppressLint("DrawAllocation")
+    // 在 onDraw 方法中修改滑块图片的绘制部分
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -80,17 +81,19 @@ class DoubleThumbProgressBarTwo @JvmOverloads constructor(
             // 获取滑块图片的 Bitmap 对象
             val thumbBitmap = (it as BitmapDrawable).bitmap
 
-            val thumb1Left = thumb1X - thumbBitmap.width / 2
-            val thumb1Top = thumbY - thumbBitmap.height / 2
-            val thumb1Right = thumb1X + thumbBitmap.width / 2
-            val thumb1Bottom = thumbY + thumbBitmap.height / 2
 
-            val thumb2Left = thumb2X - thumbBitmap.width / 2
-            val thumb2Top = thumbY - thumbBitmap.height / 2
-            val thumb2Right = thumb2X + thumbBitmap.width / 2
-            val thumb2Bottom = thumbY + thumbBitmap.height / 2
+            val thumb1Left = thumb1X - thumbBitmap.width / 2-5
+            val thumb1Top = thumbY - thumbBitmap.height / 2 - 5 // 增加垂直方向的偏移量
+            val thumb1Right = thumb1X + thumbBitmap.width / 2+5
+            val thumb1Bottom = thumbY + thumbBitmap.height / 2 + 5 // 增加垂直方向的偏移量
 
-            // 绘制滑块图片
+            val thumb2Left = thumb2X - thumbBitmap.width / 2-5
+            val thumb2Top = thumbY - thumbBitmap.height / 2 - 5 // 增加垂直方向的偏移量
+            val thumb2Right = thumb2X + thumbBitmap.width / 2+5
+            val thumb2Bottom = thumbY + thumbBitmap.height / 2 + 5 // 增加垂直方向的偏移量
+
+            // 修改绘制范围，使滑块图片超出进度条的高度
+            // 修改绘制范围，使滑块图片在垂直方向上超出进度条的高度
             it.setBounds(
                 thumb1Left.toInt(),
                 thumb1Top.toInt(),
