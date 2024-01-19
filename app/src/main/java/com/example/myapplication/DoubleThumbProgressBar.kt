@@ -38,9 +38,9 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DoubleThumbProgressBar)
         rangeMin = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMin, 0)
         rangeMax = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMax, 100)
-        thumbDrawable = context.getDrawable(R.drawable.slide)
+        thumbDrawable = context.getDrawable(R.drawable.slide2)
         typedArray.recycle()
-        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat() ?: 15f
+        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat() ?: 2f
         thumbPaint.isAntiAlias = true
         progressPaint.isAntiAlias = true
         progressPaint.color = Color.parseColor("#383838")
@@ -56,9 +56,16 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         thumbY = h / 2f
         thumb1X = w * (rangeMin - rangeMin) / (rangeMax - rangeMin).toFloat()
         thumb2X = w * (rangeMax - rangeMin) / (rangeMax - rangeMin).toFloat()
+
+        // 调整滑块的位置，使其在进度条的最大值和最小值处完整显示
+        thumb1X -= thumbRadius / 2
+        thumb2X -= thumbRadius / 2
     }
 
+
     @SuppressLint("DrawAllocation")
+    // 在 onDraw 方法中修改滑块图片的绘制部分
+    // 在 onDraw 方法中修改滑块图片的绘制部分
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -80,20 +87,21 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
             // 获取滑块图片的 Bitmap 对象
             val thumbBitmap = (it as BitmapDrawable).bitmap
 
+            // 计算滑块图片的绘制范围
             val thumb1Left = thumb1X - thumbBitmap.width / 2
-            val thumb1Top = thumbY - thumbBitmap.height / 2
             val thumb1Right = thumb1X + thumbBitmap.width / 2
+            val thumb1Top = thumbY - thumbBitmap.height / 2
             val thumb1Bottom = thumbY + thumbBitmap.height / 2
 
             val thumb2Left = thumb2X - thumbBitmap.width / 2
-            val thumb2Top = thumbY - thumbBitmap.height / 2
             val thumb2Right = thumb2X + thumbBitmap.width / 2
+            val thumb2Top = thumbY - thumbBitmap.height / 2
             val thumb2Bottom = thumbY + thumbBitmap.height / 2
 
             // 绘制滑块图片
             it.setBounds(
                 thumb1Left.toInt(),
-                thumb1Top.toInt(),
+                thumb1Top.toInt(),  // 调整滑块图片的绘制范围，使其在进度条的边界值处完整显示
                 thumb1Right.toInt(),
                 thumb1Bottom.toInt()
             )
@@ -101,12 +109,13 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
 
             it.setBounds(
                 thumb2Left.toInt(),
-                thumb2Top.toInt(),
+                thumb2Top.toInt(),  // 调整滑块图片的绘制范围，使其在进度条的边界值处完整显示
                 thumb2Right.toInt(),
                 thumb2Bottom.toInt()
             )
             it.draw(canvas)
         }
+
         // 更新 TextView 中的值
         val minValue = (18 + (thumb1X / width * (60 - 18))).toInt()
         val maxValue = (18 + (thumb2X / width * (60 - 18))).toInt()
