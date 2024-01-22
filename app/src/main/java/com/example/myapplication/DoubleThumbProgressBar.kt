@@ -29,6 +29,7 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
     private var thumbY = 0f  // 滑块的Y坐标
     private var progressPaint = Paint()
     private var progressRect = RectF()
+
     // 使用可空类型声明属性
     private var tvAgeFirst: TextView? = null
     private var tvAgeSecond: TextView? = null
@@ -56,9 +57,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         thumbY = h / 2f
         thumb1X = w * (rangeMin - rangeMin) / (rangeMax - rangeMin).toFloat()
         thumb2X = w * (rangeMax - rangeMin) / (rangeMax - rangeMin).toFloat()
-
         // 调整滑块的位置，使其在进度条的最大值和最小值处完整显示
-       // thumb1X -= thumbRadius / 2
+        // thumb1X -= thumbRadius / 2
         //thumb2X -= thumbRadius / 2
     }
 
@@ -85,15 +85,14 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         thumbDrawable?.let {
             // 获取滑块图片的 Bitmap 对象
             val thumbBitmap = (it as BitmapDrawable).bitmap
-
-            // 计算滑块图片的绘制范围
-            val thumb1Left = thumb1X - 19*thumbBitmap.width / 100
-            val thumb1Right = thumb1X + 81*thumbBitmap.width / 100
+            // 计算第一个滑块图片的绘制范围
+            val thumb1Left = thumb1X - 19 * thumbBitmap.width / 100
+            val thumb1Right = thumb1X + 81 * thumbBitmap.width / 100
             val thumb1Top = thumbY - thumbBitmap.height / 2
             val thumb1Bottom = thumbY + thumbBitmap.height / 2
-
-            val thumb2Left = thumb2X - 81*thumbBitmap.width / 100
-            val thumb2Right = thumb2X + 19*thumbBitmap.width / 100
+            // 计算第二个滑块图片的绘制范围
+            val thumb2Left = thumb2X - 81 * thumbBitmap.width / 100
+            val thumb2Right = thumb2X + 19 * thumbBitmap.width / 100
             val thumb2Top = thumbY - thumbBitmap.height / 2
             val thumb2Bottom = thumbY + thumbBitmap.height / 2
 
@@ -162,11 +161,13 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         }
         return true
     }
-    fun init(rangeMin:Int,rangeMax:Int){
-        this.rangeMin=rangeMin
-        this.rangeMax=rangeMax
+
+    fun init(rangeMin: Int, rangeMax: Int) {
+        this.rangeMin = rangeMin
+        this.rangeMax = rangeMax
         invalidate()
     }
+
     interface OnRangeChangedListener {
         fun onRangeChanged(minValue: Int, maxValue: Int)
     }
@@ -176,5 +177,4 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
     fun setOnRangeChangedListener(listener: OnRangeChangedListener) {
         onRangeChangedListener = listener
     }
-
 }

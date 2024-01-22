@@ -24,31 +24,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 设置沉浸式状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.let {
-                it.hide(WindowInsets.Type.statusBars())
-                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-            window.statusBarColor = Color.TRANSPARENT
-        }
-        // 加载自定义的XML布局文件
-        val customStatusBar = LayoutInflater.from(this).inflate(R.layout.status_bar_layout, null)
-        // 将自定义的XML布局文件设置为沉浸式状态栏的内容
-        val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-        params.gravity = Gravity.TOP
-        val content = findViewById<FrameLayout>(android.R.id.content)
-        content.addView(customStatusBar, params)
-
         // 获取年龄双滑块直线进度条和两个 TextView 控件
         val progressBarAge = binding.pbAge
         val tvAgeFirst = binding.tvAgeFirst
         val tvAgeSecond = binding.tvAgeSecond
 
-        progressBarAge.setOnRangeChangedListener(object : DoubleThumbProgressBar.OnRangeChangedListener {
+        progressBarAge.setOnRangeChangedListener(object :
+            DoubleThumbProgressBar.OnRangeChangedListener {
             override fun onRangeChanged(minValue: Int, maxValue: Int) {
                 // 更新两个 TextView 控件的值
                 tvAgeFirst.text = minValue.toString()
@@ -61,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         val tvHeightFirst = binding.tvHeightFirst
         val tvHeightSecond = binding.tvHeightSecond
 
-        progressBarHeight.setOnRangeChangedListener(object : DoubleThumbProgressBar.OnRangeChangedListener {
+        progressBarHeight.setOnRangeChangedListener(object :
+            DoubleThumbProgressBar.OnRangeChangedListener {
             override fun onRangeChanged(minValue: Int, maxValue: Int) {
                 // 更新两个 TextView 控件的值
                 tvHeightFirst.text = minValue.toString()
@@ -74,7 +57,8 @@ class MainActivity : AppCompatActivity() {
         val tvWeightFirst = binding.tvWeightFirst
         val tvWeightSecond = binding.tvWeightSecond
 
-        progressBarWeight.setOnRangeChangedListener(object : DoubleThumbProgressBar.OnRangeChangedListener {
+        progressBarWeight.setOnRangeChangedListener(object :
+            DoubleThumbProgressBar.OnRangeChangedListener {
             override fun onRangeChanged(minValue: Int, maxValue: Int) {
                 // 更新两个 TextView 控件的值
                 tvWeightFirst.text = minValue.toString()
@@ -109,6 +93,7 @@ class MainActivity : AppCompatActivity() {
             updateSwitchStateThree()
         }
     }
+
     private fun updateSwitchStateOne() {
         if (switchStateOne) {
             binding.ivClose.setImageResource(R.drawable.ic_switch_open)
