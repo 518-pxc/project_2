@@ -61,6 +61,7 @@
             android:id="@+id/sv_contain"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
             app:layout_constraintBottom_toTopOf="@id/btNext"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +75,7 @@
                     android:id="@+id/tvRecommendation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:background="@color/blue"
                     android:fontFamily="@font/pingfanghk"
                     android:paddingLeft="24dp"
@@ -82,6 +84,7 @@
                     android:paddingBottom="16dp"
                     android:text="@string/id_3"
                     android:textAppearance="@style/recommendation_id"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints" />
 
                 <com.example.myapplication.DoubleThumbProgressBar
@@ -296,19 +299,26 @@
                     app:rangeMin="140"
                     tools:ignore="MissingConstraints" />
 
+                <View
+                    android:id="@+id/rectangle"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#F5F6F7"
+                    app:layout_constraintBottom_toTopOf="@id/tvClose" />
 
                 <TextView
                     android:id="@+id/tvClose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="121dp"
+                    android:layout_marginTop="60dp"
                     android:fontFamily="@font/pingfangsc"
                     android:text="@string/id_15"
                     android:textAppearance="@style/some_id"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvWeight" />
+                    app:layout_constraintTop_toBottomOf="@id/pbWeight" />
 
                 <TextView
                     android:id="@+id/tvNew"
@@ -329,8 +339,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginBottom="16dp"
                     android:fontFamily="@font/pingfangsc"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
                     android:text="@string/id_16"
                     android:textAppearance="@style/some_id"
                     app:layout_constraintEnd_toStartOf="@+id/ivTrue"
@@ -405,7 +418,7 @@
         <Button
             android:id="@+id/btNext"
             android:layout_width="0dp"
-            android:layout_height="91dp"
+            android:layout_height="95dp"
             android:background="@drawable/btn_background"
             android:text="@string/id_18"
             android:textColor="#FFFFFF"

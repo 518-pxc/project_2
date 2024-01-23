@@ -91,8 +91,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
             val thumb1Top = thumbY - thumbBitmap.height / 2
             val thumb1Bottom = thumbY + thumbBitmap.height / 2
             // 计算第二个滑块图片的绘制范围
-            val thumb2Left = thumb2X - 81 * thumbBitmap.width / 100
-            val thumb2Right = thumb2X + 19 * thumbBitmap.width / 100
+            val thumb2Left = thumb2X - 80.3 * thumbBitmap.width / 100
+            val thumb2Right = thumb2X + 19.7 * thumbBitmap.width / 100
             val thumb2Top = thumbY - thumbBitmap.height / 2
             val thumb2Bottom = thumbY + thumbBitmap.height / 2
 
