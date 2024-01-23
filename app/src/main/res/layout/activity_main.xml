@@ -89,11 +89,11 @@
 
                 <com.example.myapplication.DoubleThumbProgressBar
                     android:id="@+id/pbAge"
-                    android:layout_width="313dp"
+                    android:layout_width="0dp"
                     android:layout_height="35dp"
-                    android:layout_marginLeft="31dp"
+                    android:layout_marginLeft="24dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginRight="31dp"
+                    android:layout_marginRight="24dp"
                     android:indeterminate="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -246,11 +246,11 @@
 
                 <com.example.myapplication.DoubleThumbProgressBar
                     android:id="@+id/pbWeight"
-                    android:layout_width="313dp"
+                    android:layout_width="0dp"
                     android:layout_height="35dp"
-                    android:layout_marginLeft="31dp"
+                    android:layout_marginLeft="24dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginRight="31dp"
+                    android:layout_marginRight="24dp"
                     android:indeterminate="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -286,11 +286,11 @@
 
                 <com.example.myapplication.DoubleThumbProgressBar
                     android:id="@+id/pbHeight"
-                    android:layout_width="313dp"
+                    android:layout_width="0dp"
                     android:layout_height="35dp"
-                    android:layout_marginLeft="31dp"
+                    android:layout_marginLeft="24dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginRight="31dp"
+                    android:layout_marginRight="24dp"
                     android:indeterminate="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
