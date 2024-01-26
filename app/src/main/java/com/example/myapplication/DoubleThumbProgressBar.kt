@@ -13,6 +13,7 @@ import android.graphics.Shader
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
@@ -38,6 +39,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
     private var tvAgeFirst: TextView? = null
     private var tvAgeSecond: TextView? = null
 
+    private var thumb1Offset = 0f
+
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DoubleThumbProgressBar)
         rangeMin = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMin, 0)
@@ -62,6 +65,10 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         thumb1X = thumbRadius  // 设置第一个滑块的初始位置为滑块半径，使滑块图片的中心点和进度条的最左端对齐
         thumb2X = w - thumbRadius  // 设置第二个滑块的初始位置为进度条宽度减去滑块半径，使滑块图片的中心点和进度条的最右端对齐
 
+
+        Log.d("xcl_debug", "onSizeChanged: h = $h")
+        thumb1Offset = h / 2f
+
         // 调整滑块的位置，使其在进度条的最大值和最小值处完整显示
         //thumb1X -= thumbRadius / 2
         //thumb2X -= thumbRadius / 2
@@ -73,12 +80,14 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+
+
         // 绘制未划过区域的进度条
-        val unselectedRect = RectF(0f, thumbY - 4, thumb1X, thumbY + 4)
+        val unselectedRect = RectF(thumb1Offset, thumbY - 4, thumb1X, thumbY + 4)
         progressPaint.color = Color.parseColor("#DEE0E3")
         canvas.drawRect(unselectedRect, progressPaint)
 
-        val unselectedRect2 = RectF(thumb2X, thumbY - 4, width.toFloat(), thumbY + 4)
+        val unselectedRect2 = RectF(thumb2X, thumbY - 4, width.toFloat() - thumb1Offset, thumbY + 4)
         canvas.drawRect(unselectedRect2, progressPaint)
 
         // 绘制滑块划过的区域
@@ -87,20 +96,20 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         canvas.drawRect(thumbRect, thumbPaint)
 
 
+        Log.d("xcl_debug", "onSizeChanged: thumb1Offset = $thumb1Offset")
+
         // 绘制滑块图片
         thumbDrawable?.let {
-            // 获取滑块图片的 Bitmap 对象
-            val thumbBitmap = (it as BitmapDrawable).bitmap
             // 计算第一个滑块图片的绘制范围
-            val thumb1Left = thumb1X - thumbBitmap.width / 2  // 计算滑块图片的左边位置
-            val thumb1Right = thumb1X + thumbBitmap.width / 2  // 计算滑块图片的右边位置
-            val thumb1Top = thumbY - thumbBitmap.height / 2  // 计算滑块图片的顶部位置
-            val thumb1Bottom = thumbY + thumbBitmap.height / 2  // 计算滑块图片的底部位置
+            val thumb1Left = thumb1X - thumb1Offset  // 计算滑块图片的左边位置
+            val thumb1Right = thumb1X + thumb1Offset  // 计算滑块图片的右边位置
+            val thumb1Top = thumbY - thumb1Offset  // 计算滑块图片的顶部位置
+            val thumb1Bottom = thumbY + thumb1Offset  // 计算滑块图片的底部位置
             // 计算第二个滑块图片的绘制范围
-            val thumb2Left = thumb2X - thumbBitmap.width / 2  // 计算滑块图片的左边位置
-            val thumb2Right = thumb2X + thumbBitmap.width / 2  // 计算滑块图片的右边位置
-            val thumb2Top = thumbY - thumbBitmap.height / 2  // 计算滑块图片的顶部位置
-            val thumb2Bottom = thumbY + thumbBitmap.height / 2  // 计算滑块图片的底部位置
+            val thumb2Left = thumb2X - thumb1Offset  // 计算滑块图片的左边位置
+            val thumb2Right = thumb2X + thumb1Offset  // 计算滑块图片的右边位置
+            val thumb2Top = thumbY - thumb1Offset  // 计算滑块图片的顶部位置
+            val thumb2Bottom = thumbY + thumb1Offset  // 计算滑块图片的底部位置
 
 
             // 绘制滑块图片
@@ -118,6 +127,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
                 thumb2Right.toInt(),
                 thumb2Bottom.toInt()
             )
+
+            Log.d("xcl_debug", "onDraw: it.bound = ${it.bounds}")
             it.draw(canvas)
         }
 
@@ -149,11 +160,11 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
                 }
 
                 // 确保滑块位置在范围内
-                if (thumb1X < 0) {
-                    thumb1X = 0f
+                if (thumb1X < thumb1Offset) {
+                    thumb1X = thumb1Offset
                 }
-                if (thumb2X > width) {
-                    thumb2X = width.toFloat()
+                if (thumb2X > width - thumb1Offset) {
+                    thumb2X = width - thumb1Offset
                 }
                 if (thumb1X > thumb2X) {
                     thumb1X = thumb2X
@@ -165,8 +176,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
                 invalidate()
 
                 // 发送进度值改变的事件
-                val minValue = (rangeMin + (thumb1X / width * (rangeMax - rangeMin))).toInt()
-                val maxValue = (rangeMin + (thumb2X / width * (rangeMax - rangeMin))).toInt()
+                val minValue = (rangeMin + ((thumb1X - thumb1Offset) / (width - 2*thumb1Offset) * (rangeMax - rangeMin))).toInt()
+                val maxValue = (rangeMin + ((thumb2X - thumb1Offset) / (width - 2*thumb1Offset) * (rangeMax - rangeMin))).toInt()
                 onRangeChangedListener?.onRangeChanged(minValue, maxValue)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
