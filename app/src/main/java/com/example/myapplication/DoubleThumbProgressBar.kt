@@ -44,7 +44,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         rangeMax = typedArray.getInt(R.styleable.DoubleThumbProgressBar_rangeMax, 100)
         thumbDrawable = context.getDrawable(R.drawable.ic_slide)
         typedArray.recycle()
-        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat() ?: 2f // 设置滑块半径为滑块图片的宽度
+        thumbRadius = thumbDrawable?.intrinsicWidth?.toFloat()?.times(0.559f) ?: 2f
+        // 设置滑块半径为滑块图片的宽度
         thumbPaint.isAntiAlias = true
         progressPaint.isAntiAlias = true
         progressPaint.color = Color.parseColor("#383838")
@@ -60,8 +61,8 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         //W:进度条的宽度
         super.onSizeChanged(w, h, oldw, oldh)
         thumbY = h / 2f
-        thumb1X = thumbRadius  // 设置第一个滑块的初始位置为滑块半径，使滑块图片的中心点和进度条的最左端对齐
-        thumb2X = w - thumbRadius  // 设置第二个滑块的初始位置为进度条宽度减去滑块半径，使滑块图片的中心点和进度条的最右端对齐
+        thumb1X = (thumbRadius).toFloat()  // 设置第一个滑块的初始位置为滑块半径，使滑块图片的中心点和进度条的最左端对齐
+        thumb2X = (w -thumbRadius).toFloat()  // 设置第二个滑块的初始位置为进度条宽度减去滑块半径，使滑块图片的中心点和进度条的最右端对齐
         Log.d("xcl_debug", "onSizeChanged: h = $h")
         thumb1Offset = h / 2f // 设置第一个滑块的偏移
     }
@@ -90,13 +91,13 @@ class DoubleThumbProgressBar @JvmOverloads constructor(
         // 绘制滑块图片
         thumbDrawable?.let {
             // 计算第一个滑块图片的绘制范围
-            val thumb1Left = thumb1X - thumb1Offset -4 // 计算滑块图片的左边位置
-            val thumb1Right = thumb1X + thumb1Offset -4// 计算滑块图片的右边位置
+            val thumb1Left = thumb1X - thumb1Offset  // 计算滑块图片的左边位置
+            val thumb1Right = thumb1X + thumb1Offset // 计算滑块图片的右边位置
             val thumb1Top = thumbY - thumb1Offset  // 计算滑块图片的顶部位置
             val thumb1Bottom = thumbY + thumb1Offset  // 计算滑块图片的底部位置
             // 计算第二个滑块图片的绘制范围
-            val thumb2Left = thumb2X - thumb1Offset +4 // 计算滑块图片的左边位置
-            val thumb2Right = thumb2X + thumb1Offset  +4// 计算滑块图片的右边位置
+            val thumb2Left = thumb2X - thumb1Offset // 计算滑块图片的左边位置
+            val thumb2Right = thumb2X + thumb1Offset  // 计算滑块图片的右边位置
             val thumb2Top = thumbY - thumb1Offset  // 计算滑块图片的顶部位置
             val thumb2Bottom = thumbY + thumb1Offset  // 计算滑块图片的底部位置
 
